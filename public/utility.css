@@ -1,0 +1,45 @@
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-8 {
+    margin-top: 24px;
+    /* Increased margin */
+}
+
+.ml-12 {
+    margin-left: 36px;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    /* Lighter track */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #b0b0b0;
+    /* Medium gray thumb */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #909090;
+    /* Darker hover thumb */
+}

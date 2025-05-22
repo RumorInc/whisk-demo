@@ -1,0 +1,105 @@
+.inventory-container {
+    max-width: 900px;
+    padding: 15px;
+}
+
+.inventory-header {
+    margin-bottom: 20px;
+}
+
+.inventory-header h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: 300;
+    color: var(--text-color);
+}
+
+.inventory-header input[type="text"] {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #555;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    background-color: #1e1e23;
+    color: #fff;
+}
+
+.inventory-cards-container {
+    height: 83vh;
+    max-height: 83vh;
+    overflow-y: auto;
+}
+
+.inventory-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.inventory-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inventory-card-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--text-color);
+}
+
+.inventory-icon {
+    font-size: 2rem;
+}
+
+.inventory-restock-btn {
+    padding: 8px 16px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.inventory-restock-btn.disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+.inventory-restock-btn:hover{
+    padding: 8px 16px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.inventory-restock-btn:hover {
+    background-color: #1e40af;
+}
+
+.stock-warn {
+    border: 1px solid yellow;
+}
+
+.stock-alarm {
+    border: 1px solid red;
+}
+
+.item-title {
+    font-size: 20px;
+}
+
+.item-id {
+    margin: 5px 0 5px 0;
+    color: #c0c0c0;
+    font-size: 14px;
+}

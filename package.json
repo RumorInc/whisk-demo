@@ -1,0 +1,24 @@
+{
+  "name": "node-express-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.9",
+    "express": "^4.21.1",
+    "http": "^0.0.1-security",
+    "mongoose": "^8.14.2",
+    "socket.io": "^4.8.1",
+    "together-ai": "^0.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

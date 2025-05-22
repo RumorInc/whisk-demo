@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%=chat ? chat.title : "Whisk"%>
+    </title>
+    <link rel="icon" href="/logo.png">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/side.css">
+    <link rel="stylesheet" href="/utility.css">
+    <link rel="stylesheet" href="/inventory.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        window.__CHAT_ID__ = '<%=chatId || "" %>';
+    </script>
+    <script src="/scripts/handle.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="flex flex-column" style="flex-direction: row;">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="text-box">
+                        <h1>Whisk</h1>
+                        <p>Automated your restaurant by chatting!</p>
+                    </div>
+                    <img class="logo" src="/logo.png" alt="Logo">
+                </div>
+                <div class="mode-options">
+                    <button class="mode-button active"><i class="material-symbols-outlined">automation</i> Smart
+                        Mode</button>
+                    <button class="mode-button"><i class="material-symbols-outlined">tune</i> Dash Pannel</button>
+                </div>
+                <ul class="conversation-list">
+                    <% tabs.forEach(tab => { %>
+                        <li class="conversation-item<%= String(tab.id) == chatId ? ' active' : '' %>" onclick="location.href='/chat/<%= tab.id %>'">
+                            <div class="conv-title">
+                                <%= tab.title %>
+                            </div>
+                            <div class="conv-info">
+                                <div class="conv-meta">
+                                    <%=tab.messages%> messages
+                                </div>
+                                <div class="conv-date">
+                                    <%=tab.createdAt%>
+                                </div>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+                <div class="sidebar-footer">
+                    <button class="option-button">
+                        <i class="material-symbols-outlined">settings</i>
+                    </button>
+                    <button class="option-button">
+                        <i class="material-symbols-outlined">help</i>
+                    </button>
+                </div>
+            </aside>
+            <main class="main-content">
+                <div class="header">
+                    <h1>
+                        <%=chat ? chat.title : "No chat selected" %>
+                    </h1>
+                    <div class="header-icons">
+                        <button title="Refresh">
+                            <i class="material-symbols-outlined" onclick="window.location.reload();">refresh</i>
+                        </button>
+                        <button title="New chat">
+                            <i class="material-symbols-outlined" onclick="location.href='/chat/create-new'">edit</i>
+                        </button>
+                        <button title="Delete chat">
+                            <i class="material-symbols-outlined" onclick="HandleFront.deleteChat(__CHAT_ID__)">delete</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chat-container">
+                    <div class="new-chat">
+                        <h1><i class="material-symbols-outlined">rainy</i> Welcome, Admin.</h1>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <textarea placeholder="Ask anything" id="chat-field"></textarea>
+                    <div class="controls">
+                      <div class="input-icons">
+                        <button class="icon-btn"><i class="material-symbols-outlined">attach_file</i></button>
+                        <button class="icon-btn"><i class="material-symbols-outlined">lightbulb</i></button>
+                        <button class="icon-btn"><i class="material-symbols-outlined">rocket_launch</i></button>
+                        <button class="icon-btn"><i class="material-symbols-outlined">palette</i></button>
+                      </div>
+                      <button class="send-icon-btn">
+                        <i class="material-symbols-outlined">arrow_upward</i>
+                      </button>
+                    </div>
+                  </div>                  
+            </main>
+            <aside class="sidebar">
+                <div class="inventory-container">
+                    <div class="inventory-header">
+                        <h1>Inventory</h1>
+                        <input type="text" placeholder="Search stock...">
+                    </div>
+                    <div class="inventory-cards-container">
+                        <% inventory.forEach(item => { %>
+                          <div class="inventory-card <%= item.stock_level === 'alarm' ? 'stock-alarm' : item.stock_level === 'warn' ? 'stock-warn' : '' %>">
+                            <div class="inventory-card-content">
+                              <div class="inventory-card-info">
+                                <div class="inventory-icon"><%= item.emoji %></div>
+                                <div>
+                                  <div class="item-title"><%= item.name %></div>
+                                  <div class="item-id"><%= item.item_id %></div>
+                                  <div class="item-quantity">Quantity: <%= item.quantity %> kg</div>
+                                </div>
+                              </div>
+                              <button class="inventory-restock-btn <%= item.restock_disabled ? 'disabled' : '' %>" <%= item.restock_disabled ? 'disabled' : '' %>>Restock</button>
+                            </div>
+                          </div>
+                        <% }); %>
+                      </div>
+                </div>
+            </aside>
+        </div>
+        <script src="/scripts/script.js"></script>
+        <script src="/scripts/createNewMessage.js"></script>
+        <script>
+            const chat = <%-JSON.stringify(chat)%>;
+            const inv = <%-JSON.stringify(inventory)%>;
+            if (chat) {
+                chat.messages.forEach(message => {
+                    if (message.role === 'user') {
+                        appendMessage(message.text, message.role)
+                    } else {
+                        appendMessage(message.text, message.role);
+                    }
+                });
+            }
+        </script>
+</body>
+
+</html>
