@@ -1,7 +1,2 @@
-# Node + Express Service Starter
-
-This is a simple hello world express.js server.
-
-## Getting Started
-
-Previews should run automatically when starting a workspace. Run the `Show Web Preview` IDX command to see the preview.
+# Whisk System
+This is an demof for an elaborate AI based restaurant management AI system titled Whisk, this demo features ability to chat with AI and manage basic inventory, as well as the AI being aware of the basic inventory.
