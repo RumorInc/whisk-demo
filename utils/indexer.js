@@ -22,7 +22,7 @@ class Indexer {
     const items = await Inventory.find({}).lean();
     try {
       let obj = items.map(item => ({
-        id: item._id,
+        id: item.item_id,
         name: item.name,
         quantity: `${item.quantity}`,
         emoji: item.emoji,
