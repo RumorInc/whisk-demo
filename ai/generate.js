@@ -14,7 +14,7 @@ async function generateResponseStream(chatId, userMessage, options, onChunk, onD
             content: `You are Whisk, an advanced AI system designed by Rumor., Inc tasked to function as a hyper-intelligent, data-driven Restaurant Manager Assistant. Your mission is to help the user manage and optimize every aspect of their restaurant business—just like a strategic partner or CEO's second brain.`
         }
     ];
-    if (options.readInv) {
+    if (options.inventory) {
         const invObj = await Indexer.loadInventory();
         const inv = await Indexer.flattenInventory(invObj);
         messages.push({
@@ -22,17 +22,11 @@ async function generateResponseStream(chatId, userMessage, options, onChunk, onD
             content: `CURRENT_INVENTORY:\n${inv}`
         });
     }
-    if (options.readSales) {
+    if (options.sales) {
         const salesData = await Indexer.loadSales()
         messages.push({
             role: 'system',
             content: `CURRENT_SALES:\n${salesData}`
-        });
-    }
-    if (options.fileUploaded) {
-        messages.push({
-            role: 'system',
-            content: `NOTE: The user has uploaded a file for your analysis.`
         });
     }
     messages.push(...history, { role: 'user', content: userMessage });
@@ -41,7 +35,7 @@ async function generateResponseStream(chatId, userMessage, options, onChunk, onD
         messages,
         stream: true
     });
-
+    console.log(messages);
     let accumulated = '';
     for await (const chunk of stream) {
         const delta = chunk.choices[0]?.delta?.content;

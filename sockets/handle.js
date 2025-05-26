@@ -21,7 +21,7 @@ module.exports = function (io) {
 
     socket.on('message', async msg => {
       try {
-        const { text, chatId, options } = msg;
+        const { text, chatId, optionMap } = msg;
         const chat = await Chats.findByIdAndUpdate(
           chatId,
           { $push: { messages: { role: 'user', text } } },
@@ -35,7 +35,7 @@ module.exports = function (io) {
         await generateResponseStream(
           chatId,
           text,
-          options,
+          optionMap,
           chunk => {
             accumulated += chunk;
             io.to(chatId).emit('new-message-chunk', { text: chunk });
