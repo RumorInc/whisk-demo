@@ -5,6 +5,7 @@
 Whisk is an early-stage prototype of an advanced AI-powered restaurant management system developed under **Rumor.**, designed to streamline operations and enhance customer interaction.
 
 ### 💡 Features in This Demo:
+![Demo screenshot](https://github.com/RumorInc/whisk-demo/blob/main/public/image.png?raw=true)
 
 * **Conversational AI Interface** – Chat with an intelligent assistant that understands and responds naturally.
 * **Inventory Awareness** – The AI is aware of current stock levels and can make decisions or answer questions based on that.
