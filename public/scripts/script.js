@@ -8,7 +8,7 @@ socket.on('inv-change', items => {
 });
 
 if (chatId && objectIdRegex.test(chatId)) {
-  let currentStreamP = null; 
+  let currentStreamP = null;
   document.querySelector('.new-chat').style.display = 'none';
   document.querySelector('.input-area').style.visibility = 'visible';
   socket.emit('join-chat', chatId);
@@ -21,6 +21,9 @@ if (chatId && objectIdRegex.test(chatId)) {
   });
   socket.on('new-message-chunk', ({ text }) => {
     if (!currentStreamP) return;
+    const contentDiv = currentStreamP.parentElement;  // .message-content
+    const loader = contentDiv.querySelector('[data-loader="true"]');
+    if (loader) loader.remove();
     currentStreamP.dataset.raw += text;
     currentStreamP.textContent += text;
   });
@@ -38,7 +41,7 @@ document.getElementById('chat-field').addEventListener('keydown', e => {
     e.preventDefault();
     const text = e.target.value.trim();
     if (!text) return;
-    socket.emit('message', { chatId, text, optionsObj });
+    socket.emit('message', { chatId, text, optionMap });
     e.target.value = '';
   }
 });
