@@ -1,7 +1,7 @@
-const optionsObj = {
-    readInv: false,
-    readSales: false,
-}
+const optionMap = {
+    inventory: false,
+    sales: false,
+};
 
 class HandleFront {
     static deleteChat(chatId) {
@@ -21,6 +21,15 @@ class HandleFront {
                 alert("Oops! Couldn't delete the chat. Try again later.");
             });
     }
+
+    static handleOptions(btnId) {
+        const btn = document.getElementById(btnId);
+        if (!(btnId in optionMap)) return;
+        optionMap[btnId] = !optionMap[btnId];
+        btn.classList.toggle('active', optionMap[btnId]);
+        console.log(optionMap);
+    }
+
     static renderInventoryCards(items) {
         const container = document.querySelector('.inventory-cards-container');
         container.innerHTML = ''; // Clear existing cards if needed
