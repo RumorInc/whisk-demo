@@ -84,8 +84,8 @@ body {
     padding: 24px;
     overflow-y: auto;
     display: flex;
-    max-height: 568px;
-    min-height: 568px;
+    max-height: 580px;
+    min-height: 580px;
     flex-direction: column;
     mask-image: linear-gradient(to bottom, 
         rgba(0, 0, 0, 0) 0%,    /* Fully transparent at the very top */
