@@ -285,3 +285,8 @@ body {
         border-image: linear-gradient(45deg, #00f, #fff, #00f) 1;
     }
 }
+
+.active {
+    border: 1px solid var(--accent) !important;
+    color: #ececec !important;
+}
