@@ -9,7 +9,7 @@ const inventoryItemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  id: {
+  item_id: {
     type: String,
     required: true,
     unique: true
