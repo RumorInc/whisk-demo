@@ -21,13 +21,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 Indexer.loadRoutes(app, path.join(__dirname, 'routes'));
 Indexer.loadRoutes(app, path.join(__dirname, 'routes/api'), '/api');
 
-const Inventory = require('./schema/inventory-schema');
-const changeStream = Inventory.watch();
-
-changeStream.on('change', (change) => {
-  console.log('Change detected:', change);
-});
-
 mongoose.connect(process.env.uri)
   .then(() => {
     console.log('MongoDB connected');
