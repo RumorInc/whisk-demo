@@ -109,23 +109,7 @@
                         <h1>Inventory</h1>
                         <input type="text" placeholder="Search stock...">
                     </div>
-                    <div class="inventory-cards-container">
-                        <% inventory.forEach(item => { %>
-                          <div class="inventory-card <%= item.stock_level === 'alarm' ? 'stock-alarm' : item.stock_level === 'warn' ? 'stock-warn' : '' %>">
-                            <div class="inventory-card-content">
-                              <div class="inventory-card-info">
-                                <div class="inventory-icon"><%= item.emoji %></div>
-                                <div>
-                                  <div class="item-title"><%= item.name %></div>
-                                  <div class="item-id"><%= item.item_id %></div>
-                                  <div class="item-quantity">Quantity: <%= item.quantity %> kg</div>
-                                </div>
-                              </div>
-                              <button class="inventory-restock-btn <%= item.restock_disabled ? 'disabled' : '' %>" <%= item.restock_disabled ? 'disabled' : '' %>>Restock</button>
-                            </div>
-                          </div>
-                        <% }); %>
-                      </div>
+                    <div class="inventory-cards-container"></div>
                 </div>
             </aside>
         </div>
@@ -134,6 +118,7 @@
         <script>
             const chat = <%-JSON.stringify(chat)%>;
             const inv = <%-JSON.stringify(inventory)%>;
+            HandleFront.renderInventoryCards(inv);
             if (chat) {
                 chat.messages.forEach(message => {
                     if (message.role === 'user') {
