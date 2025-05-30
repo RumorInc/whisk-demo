@@ -75,7 +75,6 @@ async function generateResponseStream(chatId, userMessage, options, onChunk, onD
         messages,
         stream: true
     });
-    console.log(messages);
     let accumulated = '';
     for await (const chunk of stream) {
         const delta = chunk.choices[0]?.delta?.content;
