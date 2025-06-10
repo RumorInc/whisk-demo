@@ -133,36 +133,39 @@ document.addEventListener('DOMContentLoaded', () => {
         // This is a placeholder API. In a real application, you would use your own backend API.
         try {
             const response = await fetch('/api/order', {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData),
+              method: 'POST',
+              mode: 'cors',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(orderData),
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
+          
             const result = await response.json();
+          
+            if (!response.ok) {
+              // Just display the backend message without throwing
+              orderStatusEl.textContent = result.message || 'Something went wrong!';
+              orderStatusEl.style.color = 'red';
+              return;
+            }
+          
             console.log('Order placed successfully:', result);
-
             orderStatusEl.textContent = 'Order placed successfully!';
             orderStatusEl.style.color = 'green';
             cart = [];
             renderCart();
-
-        } catch (error) {
+          
+          } catch (error) {
             console.error('Error placing order:', error);
-            orderStatusEl.textContent = 'Failed to place order. Please try again.';
+            orderStatusEl.textContent = 'Network or server error occurred.';
             orderStatusEl.style.color = 'red';
-        } finally {
+          } finally {
             setTimeout(() => {
-                placeOrderBtn.textContent = 'Place Order';
-                orderStatusEl.textContent = '';
+              placeOrderBtn.textContent = 'Place Order';
+              orderStatusEl.textContent = '';
             }, 5000);
-        }
+          }          
     }
     
     // Event Delegation for dynamic elements
