@@ -24,7 +24,7 @@ class Indexer {
       let obj = items.map(item => ({
         id: item.item_id,
         name: item.name,
-        quantity: `${item.quantity}`,
+        quantity: item.quantity.toFixed(1),
         emoji: item.emoji,
         stock_level: item.stock_level,
         restock_disabled: item.restock_disabled
