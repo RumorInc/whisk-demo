@@ -25,8 +25,37 @@
     color: #fff;
 }
 
+.restock-all {
+    padding: 12px 96px;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.restock-all:active {
+    background-color: #1e40af;
+}
+
+.restock-all i {
+    vertical-align: bottom;
+}
+
+.inventory-cards-container::-webkit-scrollbar {
+    display: none;
+}
+
 .inventory-cards-container {
-    height: 83vh;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.inventory-cards-container {
+    height: 76vh;
     max-height: 83vh;
     overflow-y: auto;
 }
