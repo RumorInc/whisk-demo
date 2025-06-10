@@ -21,7 +21,22 @@ class HandleFront {
                 alert("Oops! Couldn't delete the chat. Try again later.");
             });
     }
-
+    static async restockAll() {
+        const button = document.querySelector('.restock-all');
+        button.disabled = true;
+        button.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        button.innerHTML = '&nbsp; Restocking... &nbsp;';
+        const response = await fetch(`/api/restock`, {
+            method: 'POST'
+        });
+        if (response.status === 200) {
+            button.disabled = false;
+            button.style.backgroundColor = '#2563eb';
+            button.innerHTML = '<i class="material-symbols-outlined">inventory_2</i> Restock All';
+        } else {
+            console.error('Restock failed');
+        }
+    }
     static handleOptions(btnId) {
         const btn = document.getElementById(btnId);
         if (!(btnId in optionMap)) return;
@@ -29,7 +44,6 @@ class HandleFront {
         btn.classList.toggle('active', optionMap[btnId]);
         console.log(optionMap);
     }
-
     static renderInventoryCards(items) {
         const container = document.querySelector('.inventory-cards-container');
         container.innerHTML = ''; // Clear existing cards if needed
