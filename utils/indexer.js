@@ -1,5 +1,6 @@
 const Chats = require('../schema/chats-schema');
 const Inventory = require('../schema/inventory-schema');
+const dishSchema = require('../schema/dishes-schema');
 const fs = require('fs');
 const path = require('path');
 
@@ -28,6 +29,22 @@ class Indexer {
         emoji: item.emoji,
         stock_level: item.stock_level,
         restock_disabled: item.restock_disabled
+      }));
+      return obj;
+    } catch (e) {
+      throw e;
+    }
+  }
+  static async loadDishes() {
+    const items = await dishSchema.find({}).lean();
+    try {
+      let obj = items.map(item => ({
+        id: item._id,
+        name: item.name,
+        icon: item.icon,
+        price: item.price,
+        veg: item.veg,
+        available: item.available
       }));
       return obj;
     } catch (e) {
