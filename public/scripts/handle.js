@@ -47,7 +47,6 @@ class HandleFront {
     static renderInventoryCards(items) {
         const container = document.querySelector('.inventory-cards-container');
         container.innerHTML = ''; // Clear existing cards if needed
-
         items.forEach(item => {
             const card = document.createElement('div');
             card.classList.add('inventory-card');
@@ -73,6 +72,33 @@ class HandleFront {
         </div>
         `;
             container.appendChild(card);
+        });
+    }
+    static renderMenu(dishes) {
+        const menuItemsContainer = document.getElementById('menu-items');
+        menuItemsContainer.innerHTML = '';
+        dishes.forEach(dish => {
+            const dishCard = document.createElement('div');
+            dishCard.className = 'dish-card';
+            dishCard.innerHTML = `
+                <img src="${dish.icon}" alt="${dish.name}" class="dish-image">
+                <div class="dish-details">
+                    <h3>${dish.name}</h3>
+                    <p class="dish-price">₹${dish.price.toFixed(2)}</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn" data-action="decrease" data-id="${dish.id}">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" data-id="${dish.id}">
+                        <button class="quantity-btn" data-action="increase" data-id="${dish.id}">+</button>
+                    </div>
+                    <button 
+                        class="add-to-cart-btn ${!dish.available ? 'blocked' : ''}" 
+                        data-id="${dish.id}" 
+                        ${!dish.available ? 'disabled' : ''}>
+                        ${dish.available ? 'Add to Cart' : 'Sold Out!'}
+                    </button>
+                </div>
+            `;
+            menuItemsContainer.appendChild(dishCard);
         });
     }
 }
