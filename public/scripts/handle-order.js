@@ -1,27 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const dishes = [
-        {
-            id: '68471f44272f7c84fb9d4c22',
-            name: 'Butter Chicken',
-            price: 450.00,
-            image: 'https://www.mysavoryadventures.com/wp-content/uploads/2023/04/restaurant-style-butter-chicken.jpg'
-        },
-        {
-            id: '68471f44272f7c84fb9d4c23',
-            name: 'Paneer Butter Masala',
-            price: 375.00,
-            image: 'https://myfoodstory.com/wp-content/uploads/2021/07/restaurant-style-paneer-butter-masala-2-500x500.jpg'
-        },
-        {
-            id: '68471f44272f7c84fb9d4c24',
-            name: 'Fresh Garden Salad',
-            price: 250.00,
-            image: 'https://www.primalkitchen.com/cdn/shop/articles/20240905221054-pk-greek-salad-0214-min.jpg?v=1725643684'
-        }
-    ];
-
     let cart = [];
-
     const menuItemsContainer = document.getElementById('menu-items');
     const cartItemsContainer = document.getElementById('cart-items');
     const cartEmptyMessage = document.querySelector('.cart-empty-message');
@@ -31,28 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalEl = document.getElementById('total');
     const placeOrderBtn = document.getElementById('place-order-btn');
     const orderStatusEl = document.getElementById('order-status');
-
-    function renderMenu() {
-        menuItemsContainer.innerHTML = '';
-        dishes.forEach(dish => {
-            const dishCard = document.createElement('div');
-            dishCard.className = 'dish-card';
-            dishCard.innerHTML = `
-                <img src="${dish.image}" alt="${dish.name}" class="dish-image">
-                <div class="dish-details">
-                    <h3>${dish.name}</h3>
-                    <p class="dish-price">₹${dish.price.toFixed(2)}</p>
-                    <div class="quantity-control">
-                        <button class="quantity-btn" data-action="decrease" data-id="${dish.id}">-</button>
-                        <input type="number" class="quantity-input" value="1" min="1" data-id="${dish.id}">
-                        <button class="quantity-btn" data-action="increase" data-id="${dish.id}">+</button>
-                    </div>
-                    <button class="add-to-cart-btn" data-id="${dish.id}">Add to Cart</button>
-                </div>
-            `;
-            menuItemsContainer.appendChild(dishCard);
-        });
-    }
 
     function addToCart(dishId, quantity) {
         const dish = dishes.find(d => d.id === dishId);
@@ -200,6 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
     placeOrderBtn.addEventListener('click', placeOrder);
 
     // Initial Render
-    renderMenu();
+    HandleFront.renderMenu(dishes);
     renderCart();
+    const socket = io();
+    socket.on('dishes-change', items => {
+        console.log('Caught change!');
+        HandleFront.renderMenu(items);
+    });
 });
