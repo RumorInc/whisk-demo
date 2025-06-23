@@ -10,13 +10,21 @@ const dishSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  price: {
+    type: Number,
+    required: true
+  },
   veg: {
+    type: Boolean,
+    required: true
+  },
+  available: {
     type: Boolean,
     required: true
   },
   ingredients: {
     type: Map,
-    of: Number, // Quantities in kg/liters as decimal (e.g., 0.1 = 100g or 100ml)
+    of: Number,
     required: true
   }
 }, {
