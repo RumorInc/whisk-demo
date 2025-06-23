@@ -1,43 +1,58 @@
-const Dish = require('../../schema/dishes-schema');
-const Inventory = require('../../schema/inventory-schema');
 const express = require('express');
 const mongoose = require('mongoose');
+const Dish = require('../../schema/dishes-schema');
+const Inventory = require('../../schema/inventory-schema');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
     const { orderItems } = req.body;
+
+    // 1. Validate order items
     if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
       return res.status(400).json({ message: 'Invalid or empty orderItems array.' });
     }
 
+    // 2. Fetch all dishes & map them for fast access
     const allDishes = await Dish.find({}).lean();
     const dishMap = new Map(allDishes.map(dish => [dish._id.toString(), dish]));
-    const stockToTake = {};
 
+    // 3. Calculate total ingredients required for the order
+    const stockToTake = {};
     for (const item of orderItems) {
-      const fullDish = dishMap.get(item.id);
-      if (fullDish && fullDish.ingredients) {
-        for (const ingredientName in fullDish.ingredients) {
-          const amountPerServing = fullDish.ingredients[ingredientName];
-          const amountForOrder = amountPerServing * item.quantity;
-          stockToTake[ingredientName] = (stockToTake[ingredientName] || 0) + amountForOrder;
+      const dish = dishMap.get(item.id);
+      if (dish && dish.ingredients) {
+        for (const [ingredientName, qtyPerServing] of Object.entries(dish.ingredients)) {
+          const totalQty = qtyPerServing * item.quantity;
+          stockToTake[ingredientName] = (stockToTake[ingredientName] || 0) + totalQty;
         }
       }
     }
 
-    for (const [ingredientName, qtyToDeduct] of Object.entries(stockToTake)) {
+    // 4. Check inventory for each required ingredient
+    for (const [ingredientName, requiredQty] of Object.entries(stockToTake)) {
       const inventoryItem = await Inventory.findOne({ name: ingredientName });
+
       if (!inventoryItem) {
         return res.status(500).json({ message: `Ingredient not found in inventory: ${ingredientName}` });
       }
-      if (inventoryItem.quantity < 0.5) {
-        return res.status(400).json({ message: `Stock too low for ${ingredientName}, please restock.` });
+
+      if (inventoryItem.quantity < requiredQty) {
+        const affectedDishIds = allDishes
+          .filter(d => d.ingredients && d.ingredients[ingredientName])
+          .map(d => d._id);
+
+        await Dish.updateMany(
+          { _id: { $in: affectedDishIds } },
+          { available: false }
+        );
+
+        return res.status(400).json({
+          message: `Insufficient stock for '${ingredientName}'. Affected dishes are now marked as sold out.`
+        });
       }
-      if (inventoryItem.quantity < qtyToDeduct) {
-        return res.status(400).json({ message: `Sorry, not enough ${ingredientName} for this order.` });
-      }
-      inventoryItem.quantity -= qtyToDeduct;
+
+      inventoryItem.quantity -= requiredQty;
       if (inventoryItem.quantity < 3) {
         inventoryItem.restock_disabled = false;
         inventoryItem.stock_level = 'alarm';
@@ -46,11 +61,19 @@ router.post('/', async (req, res) => {
         inventoryItem.stock_level = 'warn';
       }
       await inventoryItem.save();
-    }    
-    res.status(200).json({ message: 'Order processed successfully.', stockToTake });
+    }
+
+    return res.status(200).json({
+      message: 'Order processed successfully.',
+      usedStock: stockToTake
+    });
+
   } catch (error) {
     console.error('Error processing order:', error);
-    res.status(500).json({ message: 'An internal server error occurred.', error: error.message });
+    return res.status(500).json({
+      message: 'An internal server error occurred.',
+      error: error.message
+    });
   }
 });
 
