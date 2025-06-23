@@ -1,17 +1,29 @@
 /* sockets/handle.js */
 const Chats = require('../schema/chats-schema');
 const Inventory = require('../schema/inventory-schema');
+const dishSchema = require('../schema/dishes-schema');
 const Indexer = require('../utils/indexer');
 const { generateResponseStream } = require('../ai/generate');
 
 module.exports = function (io) {
-  const changeStream = Inventory.watch();
-  changeStream.on('change', async () => {
+  // Watch Inventory changes
+  const inventoryChangeStream = Inventory.watch();
+  inventoryChangeStream.on('change', async () => {
     try {
-      const inv = await Indexer.loadInventory();
-      io.emit('inv-change', inv);
+      const updatedInventory = await Indexer.loadInventory();
+      io.emit('inv-change', updatedInventory);
     } catch (err) {
-      console.error('Error handling inventory change:', err);
+      console.error('Error on inventory change:', err);
+    }
+  });
+
+  const dishChangeStream = dishSchema.watch();
+  dishChangeStream.on('change', async () => {
+    try {
+      const updatedDishes = await Indexer.loadDishes();
+      io.emit('dishes-change', updatedDishes);
+    } catch (err) {
+      console.error('Error on dish change:', err);
     }
   });
   io.on('connection', socket => {
