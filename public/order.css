@@ -146,6 +146,13 @@ body {
     transform: scale(1.05);
 }
 
+.blocked {
+    background: #7b7b7b;
+    cursor: not-allowed; /* ✅ not 'not allowed' */
+    opacity: 0.6; /* optional: makes it look visibly disabled */
+    pointer-events: none; /* optional: blocks all interactions */
+}
+
 .cart {
     background: var(--card-bg-color);
     padding: 1.5rem;
