@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/scripts/handle.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -50,6 +52,9 @@
             </aside>
         </main>
     </div>
+    <script>
+        const dishes = <%-JSON.stringify(dishes)%>;
+    </script>
     <script src="/scripts/handle-order.js"></script>
 </body>
 </html>
